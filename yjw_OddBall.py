@@ -6,42 +6,7 @@ g_GuessTime = 0  # The number of guess times in a single round.
 # Return Value: A list including all the identifiers of the selected balls, e.g. [1,2,3].
 # Exception: The function will ask the user to try to enter again if the input is invalid.
 def select_balls(side,NumberOfBalls):
-    input_index = input("Please input the index of the balls which you want to put on the %s pan. \
-Please seperate each ball identifier with one minimum space, e.g. 1 2 11\n" %side)
-    index_list = input_index.split(' ')
-    validity = True
-    while True:
-        # Distinguish strings.
-        if validity == False:
-            index_list = input("Please input the index of balls again:\n").split(' ')
-        validity = True
-        for i in index_list:
-            if str(i).isdigit():
-                continue
-            else:
-                print("Invalid Input! A digit is required.")
-                validity = False
-                break
-        if validity == False:
-            continue
-        # Distinguish floats or integers out of range.
-        for i in index_list:
-            if int(i) == float(i) and int(i) <= NumberOfBalls and int(i) > 0:
-                continue
-            else:
-                print("Invalid Input! An integer smaller than the number of balls is required.")
-                validity = False
-                break
-        if validity == False:
-            continue
-        index_list = list(map(lambda x:int(x),index_list))
-        # Distinguish if a single ball is placed more than once.
-        if len(set(index_list)) != len(index_list):
-            print("Invalid Input! You can't select a single ball more than once.")
-            validity = False
-        if validity == True:
-            break
-    return index_list
+    pass
 
 # Final check of the validity of the input, i.e. if some of the balls are selected more than once.
 # Parameter: The total number of balls in this game
