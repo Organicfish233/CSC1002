@@ -39,29 +39,29 @@ def input_guess():
 # Check whether the number of balls is valid, if not, raise an error to be catched later.
 def check_number_validity(UserInput):
     if not UserInput.isdigit():
-        raise ValueError("The input %s is not a positive integer."% UserInput)
+        raise ValueError("The input '%s' is not a positive integer."% UserInput)
     elif eval(UserInput)%2 != 0:
-        raise ValueError("The input %s is not even."% UserInput)
+        raise ValueError("The input '%s' is not even."% UserInput)
     elif eval(UserInput) == 0:
-        raise ValueError("The input %s is not larger than 0." %UserInput)
+        raise ValueError("The input '%s' is not larger than 0." %UserInput)
 
 
 # Check whether the identifiers of the balls are all valid, if not, raise an error to be catched later.
 def check_identifier_validity(UserInput,NumberOfBalls):
     for i in UserInput:
         if not i.isdigit():
-            raise ValueError("The input %s is not a positive integer."% i)
+            raise ValueError("The input '%s' is not a positive integer."% i)
         elif eval(i) == 0:
-            raise ValueError("The input %s is not larger than 0." %i)
+            raise ValueError("The input '%s' is not larger than 0." %i)
         elif eval(i) > NumberOfBalls:
-            raise IndexError("The input %s is out of range. You have only %d balls."%(i,NumberOfBalls))
+            raise IndexError("The input '%s' is out of range. You have only %d balls."%(i,NumberOfBalls))
 
 
 # Check whether a single ball is placed on both sides, if it is, raise an error to be catched later.
 def check_both_sides(LeftBalls,RightBalls):
     for ball in LeftBalls:
         if ball in RightBalls:
-            raise ValueError("The ball %s appear in both sides of the scale."% ball)
+            raise ValueError("The ball '%s' appear in both sides of the scale."% ball)
     if len(LeftBalls) != len(RightBalls):
         raise ValueError("The numbers of the balls on both sides are not equal.")
 
@@ -69,11 +69,11 @@ def check_both_sides(LeftBalls,RightBalls):
 # Check whether the guess of user is valid, if not, raise an error to be catched later.
 def check_guess_validity(Guess,NumberOfBalls):
     if not Guess.isdigit():
-        raise ValueError("Your guess %s is not a positive integer."% Guess)
+        raise ValueError("Your guess '%s' is not a positive integer."% Guess)
     elif eval(Guess) == 0:
-        raise ValueError("Your guess %s is not larger than 0."% Guess)
+        raise ValueError("Your guess '%s' is not larger than 0."% Guess)
     elif eval(Guess) > NumberOfBalls:
-        raise IndexError("Your guess %s is out of range. You only have %d balls."% (Guess,NumberOfBalls))
+        raise IndexError("Your guess '%s' is out of range. You only have %d balls."% (Guess,NumberOfBalls))
 
 
 # Ask the user to input the number of balls. 
