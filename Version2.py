@@ -1,11 +1,19 @@
 from random import randint
 
-g_game_round = 0
-g_guess_time = 0
+g_game_round = 0 #Count the game rounds.
+g_guess_time = 0 #Count the times of guess.
+
+greeting = """Welcome to the Odd Ball Game.
+You are going to choose several balls, in which hides an odd ball.
+The odd ball looks the same as other balls, but it's a little bit heavier.
+You are provide with a scale to find out the odd ball.
+Good Luck to You!
+"""
+
 
 # Randomly select an odd ball.
 def choose_odd_ball(NumberOfBalls):
-    index = randint(0,int(NumberOfBalls))
+    index = randint(1,int(NumberOfBalls))
     return index
 
 
@@ -18,8 +26,7 @@ def input_number_of_balls():
 # Prompt the user to input the identifiers of several balls.
 # There balls will be put on either side of the scale.
 def input_identifier_of_balls(side):
-    result = input("""Please input the identifiers of the balls you want to put on the %s side of the scale.
-The identifiers should be positive numbers separated by a minimum space. e.g. 1 2 11\nInput here:""" %side)
+    result = input("Please input the identifiers of the ball(s) to be placed on the %s pan: "% side)
     return result.split(" ")
 
 
@@ -43,9 +50,9 @@ def check_number_validity(UserInput):
 def check_identifier_validity(UserInput,NumberOfBalls):
     for i in UserInput:
         if not i.isdigit():
-            raise ValueError("The input %s is not a positive integer."% UserInput)
+            raise ValueError("The input %s is not a positive integer."% i)
         elif eval(i) == 0:
-            raise ValueError("The input %s is not larger than 0." %UserInput)
+            raise ValueError("The input %s is not larger than 0." %i)
         elif eval(i) > NumberOfBalls:
             raise IndexError("The input %s is out of range. You have only %d balls."%(i,NumberOfBalls))
 
@@ -55,6 +62,8 @@ def check_both_sides(LeftBalls,RightBalls):
     for ball in LeftBalls:
         if ball in RightBalls:
             raise ValueError("The ball %s appear in both sides of the scale."% ball)
+    if len(LeftBalls) != len(RightBalls):
+        raise ValueError("The numbers of the balls on both sides are not equal.")
 
 
 # Check whether the guess of user is valid, if not, raise an error to be catched later.
@@ -130,17 +139,25 @@ def prompt_guess(NumberOfBalls):
 
 # Weigh the balls.
 def weigh(LeftBalls,RightBalls,OddIndex):
-    if len(LeftBalls) > len(RightBalls):
-        result = "Left Heavier"
-    elif len(LeftBalls) < len(RightBalls):
-        result = "Right Heavier"
-    elif str(OddIndex) in LeftBalls:
+    if str(OddIndex) in LeftBalls:
         result = "Left Heavier"
     elif str(OddIndex) in RightBalls:
         result = "Right Heavier"
     else:
         result = "Balanced!"
     return result
+
+
+# Demonstrate the inputs of the user.
+def demonstrate(LeftBalls,RightBalls):
+    print("Your inputs for left: ",end = " ")
+    for i in LeftBalls:
+        print(i,end = " ")
+    print()
+    print("Your inputs for right:",end = " ")
+    for i in RightBalls:
+        print(i,end = " ")
+    print()
 
 
 def check_guess_correctness(IndexOfOddball,Guess):
@@ -150,10 +167,12 @@ def check_guess_correctness(IndexOfOddball,Guess):
 
 # One round of the game.
 def start_one_round(number_of_balls,identifier_of_oddball):
-    global g_game_round
     global g_guess_time
-    g_game_round += 1
+    print()
+    print("""Next, please input the identifiers of the balls you want to put on the scale.
+The identifiers should be positive numbers separated by a minimum space. e.g. 1 2 11\n""")
     left_balls,right_balls = prompt_input_bothsides(number_of_balls)
+    demonstrate(left_balls,right_balls)
     print(weigh(left_balls,right_balls,identifier_of_oddball))
     user_guess = int(prompt_guess(number_of_balls))
     g_guess_time += 1
@@ -169,8 +188,10 @@ def start_one_round(number_of_balls,identifier_of_oddball):
 # The game loop. The loop breaks only when the user successfully find the odd ball.
 def game_loop():
     global g_guess_time
+    global g_game_round
     number_of_balls = int(prompt_input_number())
     identifier_of_oddball = choose_odd_ball(number_of_balls)
+    g_game_round += 1
     while True:
         if start_one_round(number_of_balls,identifier_of_oddball) == True:
             print("Congratulations, your guess is correct!")
@@ -181,6 +202,7 @@ def game_loop():
 
 # The loop of different rounds of the game.
 # The user can choose to quit after each round.
+print(greeting)
 while True:
     game_loop()
     print("Round %d ends. Would you like to start a new round?"% g_game_round)
