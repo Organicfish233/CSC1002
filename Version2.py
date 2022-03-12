@@ -2,6 +2,7 @@ from random import randint
 
 g_game_round = 0 #Count the game rounds.
 g_guess_time = 0 #Count the times of guess.
+g_scale_use_time = 0 #Count the times of using the scale.
 
 greeting = """Welcome to the Odd Ball Game.
 You are going to choose several balls, in which hides an odd ball.
@@ -32,7 +33,7 @@ def input_identifier_of_balls(side):
 
 # Prompt the user to guess the identifier of the odd ball.
 def input_guess():
-    guess = input("Please guess the identifier of the odd ball.\nInput here:")
+    guess = input("Please guess the identifier of the odd ball. You can directly press Enter to proceed to reweighing. \nInput here:")
     return guess
 
 
@@ -68,7 +69,9 @@ def check_both_sides(LeftBalls,RightBalls):
 
 # Check whether the guess of user is valid, if not, raise an error to be catched later.
 def check_guess_validity(Guess,NumberOfBalls):
-    if not Guess.isdigit():
+    if Guess == "":
+        pass
+    elif not Guess.isdigit():
         raise ValueError("Your guess '%s' is not a positive integer."% Guess)
     elif eval(Guess) == 0:
         raise ValueError("Your guess '%s' is not larger than 0."% Guess)
@@ -161,21 +164,28 @@ def demonstrate(LeftBalls,RightBalls):
 
 
 def check_guess_correctness(IndexOfOddball,Guess):
-    if not IndexOfOddball == Guess:
+    global g_guess_time
+    if Guess == "":
+        g_guess_time -= 1
+        raise ValueError("You choose to skip the guessing chance and reweigh.")
+    elif not IndexOfOddball == int(Guess):
         raise ValueError("Sorry, your guess is wrong.")
 
 
 # One round of the game.
 def start_one_round(number_of_balls,identifier_of_oddball):
     global g_guess_time
+    global g_scale_use_time
     print()
     print("""Next, please input the identifiers of the balls you want to put on the scale.
+The identifiers are in consecutive numerical sequence, starting with 1.
 The identifiers should be positive numbers separated by a minimum space. e.g. 1 2 11\n""")
     left_balls,right_balls = prompt_input_bothsides(number_of_balls)
     demonstrate(left_balls,right_balls)
     print(weigh(left_balls,right_balls,identifier_of_oddball))
-    user_guess = int(prompt_guess(number_of_balls))
+    user_guess = prompt_guess(number_of_balls)
     g_guess_time += 1
+    g_scale_use_time += 1
     try:
         check_guess_correctness(identifier_of_oddball,user_guess)
         return True
@@ -189,6 +199,7 @@ The identifiers should be positive numbers separated by a minimum space. e.g. 1 
 def game_loop():
     global g_guess_time
     global g_game_round
+    global g_scale_use_time
     number_of_balls = int(prompt_input_number())
     identifier_of_oddball = choose_odd_ball(number_of_balls)
     g_game_round += 1
@@ -196,7 +207,9 @@ def game_loop():
         if start_one_round(number_of_balls,identifier_of_oddball) == True:
             print("Congratulations, your guess is correct!")
             print("You've guessed %d time(s)."% g_guess_time)
+            print("You've used the scale for %d time(s)." % g_scale_use_time)
             g_guess_time = 0
+            g_scale_use_time = 0
             break
 
 
@@ -206,10 +219,10 @@ print(greeting)
 while True:
     game_loop()
     print("Round %d ends. Would you like to start a new round?"% g_game_round)
-    print("Input yes to start a new round, otherwise quit.")
+    print("Input yes to start a new round, otherwise to quit.")
     user_choice = input("Input here:")
     if user_choice == "yes":
-        print("------------------")
+        print("------------------------")
         print("Round %d starts..."% (g_game_round+1))
         continue
     else:
