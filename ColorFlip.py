@@ -4,7 +4,7 @@ import math
 
 # Some parameters and basic data.
 g_board =[]  # 2-dimensional list to store the information of the board
-g_size_of_square = 80  # The size of each square, in pixels
+g_size_of_square = 60  # The size of each square, in pixels
 g_relative_size_of_gap = 0.1  # Size of gap between squares/Size of square
 g_width_of_border = 5  # In pixels 
 g_current = (-1,-1)  # Store the position of currently chosen square
